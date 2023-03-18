@@ -13,18 +13,22 @@ $sys_date     = date_format($date, 'Y-m-d');
 
 
 //=============================================
-function showFileContent($f_file)
+function showFileContent($f_file,$mode)
 //=============================================
 {
   
     $file = fopen($f_file, "r");
     if ($file)
     {
-        echo("<p>$f_file</p>");
+        //echo("<p>$f_file</p>");
         while(! feof($file))
         {
             $line = fgets($file);
-            echo "<h1>$line</h1>";
+            if ($mode==1)
+                echo "$line";
+            if ($mode==2)
+                echo "<h1>$line</h1>";
+
         }
         fclose($file);
     }
@@ -53,7 +57,7 @@ function showAllCurrentFiles()
             if (strlen($line) > 2)
             {
               sscanf($line, "%s", $curFile);
-              showFileContent($curFile);
+              showFileContent($curFile,2);
             }
         }
         fclose($ffile);
@@ -76,13 +80,13 @@ if (isset($_GET['par']))
   $label = $_GET['label'];
 
   $file = "current-$label-p$par.saxeniot";
-  showFileContent($file);
+  showFileContent($file,1);
 } 
 else
   showAllCurrentFiles();
 
 
-echo "SAXENIOT Access ok\n";
+//echo "SAXENIOT Access ok\n";
 
 //=============================================
 // End of File
