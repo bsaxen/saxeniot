@@ -53,7 +53,7 @@ function currentValue($id,$par,$value,$ts,$day,$label)
 {
   
   $file = "current-$label-p$par.saxeniot";
-  $line = "$ts $value\n";
+  $line = "+$value $ts\n";
   file_put_contents($file, $line);
 
   return $file;
