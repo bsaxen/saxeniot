@@ -1,6 +1,6 @@
 //=============================================
 // File.......: saxeniotNilmReader.c
-// Date.......: 2023-03-18
+// Date.......: 2023-03-20
 // Author.....: Benny Saxen
 // Description: 
 //=============================================
@@ -18,7 +18,7 @@
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 
-const char* host = "rdf.simuino.com";
+const char* host = "x.simuino.com";
 const uint16_t port = 80;
 String server_url = "/saxeniot_access.php";
 String label = "kvv32_nilm";
@@ -29,10 +29,12 @@ ESP8266WiFiMulti WiFiMulti;
 int counter = 0;
 String mac;
 
-const byte led_pin1       = 2; // D4 NodeMcu
-const byte led_pin2       = 5; // D1 NodeMcu
-const byte led_pin3       = 4; // D2 NodeMcu
-const byte led_pin4       = 15; // D8 NodeMcu
+const byte led_v1            = 2; // D4 NodeMcu
+const byte led_v2            = 5; // D1 NodeMcu,
+const byte led_v3            = 4; // D2 NodeMcu
+const byte led_v4            = 13; // D2 NodeMcu
+const byte led_read          = 12; // D6 NodeMcu
+const byte led_no_connection = 14; // D5 NodeMcu
 
 int timeToCheckStatus    = 0;
 unsigned long t1,t2,dt,ttemp;
@@ -43,6 +45,42 @@ int bounce_value          = 50; // minimum time between interrupts
 //=============================================
 void setup() {
 //=============================================
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(led_v1, OUTPUT);
+  pinMode(led_v2, OUTPUT);
+  pinMode(led_v3, OUTPUT);
+  pinMode(led_v4, OUTPUT);
+  pinMode(led_read, OUTPUT);
+  pinMode(led_no_connection, OUTPUT);
+  
+  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(led_v1,LOW);
+  digitalWrite(led_v2,LOW);
+  digitalWrite(led_v3,LOW);
+  digitalWrite(led_v4,LOW);
+  digitalWrite(led_read,LOW);
+  digitalWrite(led_no_connection,LOW);
+
+  digitalWrite(led_v1,HIGH);
+  delay(500);
+  digitalWrite(led_v2,HIGH);
+  delay(500);
+  digitalWrite(led_v3,HIGH);
+  delay(500);
+  digitalWrite(led_v4,HIGH);
+  delay(500);
+  digitalWrite(led_read,HIGH);
+  delay(500);
+  digitalWrite(led_no_connection,HIGH);
+  delay(500);
+  digitalWrite(led_v1,LOW);
+  digitalWrite(led_v2,LOW);
+  digitalWrite(led_v3,LOW);
+  digitalWrite(led_v4,LOW);
+  digitalWrite(led_read,LOW);
+  //digitalWrite(led_no_connection,LOW);
+
   Serial.begin(9600);
 
   // We start by connecting to a WiFi network
@@ -60,6 +98,7 @@ void setup() {
 
   mac = WiFi.macAddress();
 
+  digitalWrite(led_no_connection,LOW);
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
@@ -70,28 +109,7 @@ void setup() {
   mac.replace(":","-");
 
 
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(led_pin1, OUTPUT);
-  pinMode(led_pin2, OUTPUT);
-  pinMode(led_pin3, OUTPUT);
-  pinMode(led_pin4, OUTPUT);
   
-  digitalWrite(LED_BUILTIN,LOW);
-  digitalWrite(led_pin1,LOW);
-  digitalWrite(led_pin2,LOW);
-  digitalWrite(led_pin3,LOW);
-  digitalWrite(led_pin4,LOW);
-
-  digitalWrite(led_pin1,HIGH);
-  delay(500);
-  digitalWrite(led_pin2,HIGH);
-  delay(500);
-  digitalWrite(led_pin3,HIGH);
-  delay(500);
-  digitalWrite(led_pin1,LOW);
-  digitalWrite(led_pin2,LOW);
-  digitalWrite(led_pin3,LOW);
-
 
   delay(500);
 }
@@ -173,26 +191,102 @@ void loop() {
   Serial.println("closing connection");
   client.stop();
 
-  digitalWrite(led_pin1,LOW);
-  digitalWrite(led_pin2,LOW);
-  digitalWrite(led_pin3,LOW);
+  digitalWrite(led_v1,LOW);
+  digitalWrite(led_v2,LOW);
+  digitalWrite(led_v3,LOW);
+  digitalWrite(led_v4,LOW);
+  digitalWrite(led_no_connection,LOW);
 
-  if (value > 200)
+  if (value >= 100 && value < 200)
   {
-    digitalWrite(led_pin1,HIGH);
+    digitalWrite(led_v1,HIGH);
   }
-  if (value > 500)
+  if (value >= 200 && value < 300)
   {
-    digitalWrite(led_pin2,HIGH);
+    digitalWrite(led_v2,HIGH);
   }
-  if (value > 1000)
+  if (value >= 300 && value < 400)
   {
-    digitalWrite(led_pin3,HIGH);
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v2,HIGH);
+  }
+  if (value >= 400 && value < 500)
+  {
+    digitalWrite(led_v3,HIGH);
+  }
+  if (value >= 500 && value < 600)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v3,HIGH);
+  }
+  if (value >= 600 && value < 700)
+  {
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v3,HIGH);
+  }
+  if (value >= 700 && value < 800)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v3,HIGH);
+  }
+  if (value >= 800 && value < 900)
+  {
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 900 && value < 1000)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1000 && value < 1100)
+  {
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1100 && value < 1200)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1200 && value < 1300)
+  {
+    digitalWrite(led_v3,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1300 && value < 1400)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v3,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1400 && value < 1500)
+  {
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v3,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1500 && value < 1600)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v3,HIGH);
+    digitalWrite(led_v4,HIGH);
+  }
+  if (value >= 1600)
+  {
+    digitalWrite(led_v1,HIGH);
+    digitalWrite(led_v2,HIGH);
+    digitalWrite(led_v3,HIGH);
+    digitalWrite(led_v4,HIGH);
+    digitalWrite(led_no_connection,HIGH);
   }
 
-  digitalWrite(led_pin4,HIGH);
+
+  digitalWrite(led_read,HIGH);
   delay(period*10);
-  digitalWrite(led_pin4,LOW);
+  digitalWrite(led_read,LOW);
 
 
   delay(period*1000);
