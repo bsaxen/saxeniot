@@ -1,7 +1,7 @@
 <?php
 //=============================================
 // File.......: saxeniot_access.php
-// Date.......: 2023-03-18
+// Date.......: 2023-03-24
 // Author.....: Benny Saxen
 // Description: 
 //=============================================
@@ -82,8 +82,21 @@ if (isset($_GET['par']))
   $file = "current-$label-p$par.saxeniot";
   showFileContent($file,1);
 } 
-else
+if (isset($_GET['power']))
+{
+
+  //$par = $_GET['par'];
+  $label = $_GET['label'];
+
+  $file = "current-$label-p1.saxeniot";
+  showFileContent($file,1);
+  $file = "sum-$label-p2-$sys_date.saxeniot";
+  showFileContent($file,1);
+} 
+if (isset($_GET['all']))
+{
   showAllCurrentFiles();
+}
 
 
 //echo "SAXENIOT Access ok\n";
