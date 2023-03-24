@@ -1,7 +1,7 @@
 <?php
 //=============================================
 // File.......: saxeniot_server.php
-// Date.......: 2023-03-18
+// Date.......: 2023-03-24
 // Author.....: Benny Saxen
 // Description: 
 //=============================================
@@ -53,8 +53,47 @@ function currentValue($id,$par,$value,$ts,$day,$label)
 {
   
   $file = "current-$label-p$par.saxeniot";
-  $line = "+$value $ts\n";
+  $line = "$value\n";
   file_put_contents($file, $line);
+
+  return $file;
+}
+//=============================================
+function todayValue($id,$par,$value,$ts,$day,$label)
+//=============================================
+{
+  
+  $file_today = "today-$label-p$par.saxeniot";
+  $file_sum = "sum-$label-p$par-$day.saxeniot";
+  $handle = fopen($file_sum, "r");
+  if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+        sscanf($line,'%d',$x);
+    }
+    fclose($handle);
+    file_put_contents($file_today, $x);
+  }
+
+  return $file;
+}
+//=============================================
+function sumValue($id,$par,$value,$ts,$day,$label)
+//=============================================
+{
+  $file = "sum-$label-p$par-$day.saxeniot";
+  $handle = fopen($file, "r");
+  if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+        sscanf($line,'%d',$x);
+    }
+    fclose($handle);
+    $new = $x + $value;
+    file_put_contents($file, $new);
+  }
+  else 
+  {
+    file_put_contents($file, 0);
+  }
 
   return $file;
 }
@@ -79,6 +118,8 @@ if (isset($_GET['id']))
   
       $ref = logging($id,$ii,$temp,$sys_ts, $sys_date,$label);
       $ref = currentValue($id,$ii,$temp,$sys_ts, $sys_date,$label);
+      $ref = sumValue($id,$ii,$temp,$sys_ts, $sys_date,$label);
+      //$ref = todayValue($id,$ii,$temp,$sys_ts, $sys_date,$label);
   }
   
 
