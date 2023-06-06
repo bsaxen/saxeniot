@@ -39,8 +39,8 @@ foreach($lines as $line) {
     function drawChart() {
 
       var data = new google.visualization.DataTable();
-      data.addColumn('number', 'Day');
-      data.addColumn('number', 'Summary');
+      data.addColumn('timeofday', 'Time');
+      data.addColumn('number', 'Watts');
 
       data.addRows([
 
@@ -64,16 +64,22 @@ foreach($lines as $line) {
             $line = trim($line);    
             $count += 1;
             $x = explode(' ', $line);
-            $value = $x[2];
-        
+            $times[$count] = $x[1];
+            $value = $x[2]; 
             $val[$count] = $value;
         }
 
         $size = count($val);
         for ($ii = 1; $ii <= $size; $ii++) {
             $value = $val[$ii];
-            if ($ii < $size) echo "[$ii,$value],";
-            else echo "[$ii,$value]";
+            $time = $times[$ii];
+            $arr = explode(':', $time);
+            $hour = $arr[0];
+            $min = $arr[1];
+            $sec = $arr[2];
+
+            if ($ii < $size) echo "[[$hour,$min,$sec],$value],";
+            else echo "[[$hour,$min,$sec],$value]";
         }
     }
     ?>
@@ -89,13 +95,14 @@ foreach($lines as $line) {
         height: 900,
         axes: {
           x: {
-            0: {side: 'top'}
+            0: {side: 'bottom'}
           }
         }
       };
 
+      //var chart = new google.charts.Line(document.getElementById('curve_chart'));
       var chart = new google.charts.Line(document.getElementById('line_top_x'));
-
+      //chart.draw(data, options);
       chart.draw(data, google.charts.Line.convertOptions(options));
     }
   </script>
