@@ -20,7 +20,7 @@ const char* password = STAPSK;
 
 const char* host = "rdf.simuino.com";
 const uint16_t port = 80;
-String url = "/saxeniot_server.php";
+String app = "/saxeniot_server.php";
 String label = "kvv32_outdoor_temp";
 //String label = "kvv32_heater_temp";
 int period = 180; // Sec
@@ -133,7 +133,7 @@ void loop() {
     return;
   }
 
-  String url = "/device_server.php";
+  String url = app;
   url += "?id=";
   url += mac;
   
