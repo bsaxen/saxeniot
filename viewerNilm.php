@@ -39,24 +39,30 @@ foreach($lines as $line) {
     function drawChart() {
 
       var data = new google.visualization.DataTable();
-      data.addColumn('timeofday', 'Time');
-      data.addColumn('number', 'Watts');
-
-      data.addRows([
 
     <?php
     if ($select == 'sum')
     {
+      echo("data.addColumn('string', 'Day');\n");
+      echo("data.addColumn('number', 'Watts');\n");
+
+      echo("data.addRows([\n");
+
         $size = count($data);
         for ($ii = 1; $ii <= $size; $ii++) {
             $value = $data[$ii];
-            if ($ii < $size) echo "[$ii,$value],";
-            else echo "[$ii,$value]";
+            $datum = $dates[$ii];
+            if ($ii < $size) echo "['$datum',$value],";
+            else echo "['$datum',$value]";
         }
     }
     
     if ($select != 'sum')
     {
+      echo("data.addColumn('timeofday', 'Time');");
+      echo("data.addColumn('number', 'Watts');");
+
+      echo("data.addRows([");
         $count = 0;
         
         $lines = file($fil);
@@ -86,6 +92,13 @@ foreach($lines as $line) {
 
       ]);
 
+    // Create DateFormat with a timezone offset of -4
+    //var dateFormat = new google.visualization.DateFormat({formatType: 'long', timeZone: +1});
+
+    // Format the first column
+    //dateFormat.format(data, 0);
+
+
       var options = {
         chart: {
           title: 'Daily Electric Power KVV32',
@@ -93,10 +106,14 @@ foreach($lines as $line) {
         },
         width: 1600,
         height: 900,
-        axes: {
-          x: {
-            0: {side: 'bottom'}
-          }
+        //axes: {
+        //  x: {
+        //    0: {side: 'bottom'}
+        //  }
+        //},
+        hAxis: { 
+          title: 'Time of day',
+          gridlines: {count: 24}
         }
       };
 
