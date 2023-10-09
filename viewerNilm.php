@@ -4,7 +4,7 @@ $select =  $_GET["date"];
 $fil = 'log-kvv32_nilm-p1-60-01-94-0E-28-89-'.$select.'.saxeniot';
 echo("$fil $select<br>");
 echo("<h2>Electric Power KVV2</h2>");
-echo ("<a href=\"pow.php?date=sum\">Summary</a><br>");
+echo ("<a href=\"viewerNilm.php?date=sum\">Summary</a><br>");
 exec("ls sum*nilm-p2*.saxeniot > work.txt");
 $lines = file('work.txt');
 $count = 0;
